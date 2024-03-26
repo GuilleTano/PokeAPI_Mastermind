@@ -1,14 +1,14 @@
 import { v4 as uuidv4 } from 'uuid';
-import { hashPassword, comparePassword, hashPasswordSync } from "../crypto.js";
+import { myCrypt } from "../crypto.js";
 import { teamController } from './team_controller.js';
-
+const userController = {};
 const userDB = {};
 
 // Registro de usuarios
-const registerUser = async (user, pass) => {
+userController.registerUser = async (user, pass) => {
     try {
         //console.log("llamando registerUser");
-        const hashedPassword = await hashPassword(pass);
+        const hashedPassword = await myCrypt.hashPassword(pass);
         const userId = uuidv4();
         userDB[userId] = {
             userName: user,
@@ -22,11 +22,11 @@ const registerUser = async (user, pass) => {
     }
 };
 
-const getUser = (userId) =>{
+userController.getUser = (userId) =>{
     return userDB[userId];
 }
 
-const getUserIdFromUserName = (userName) =>{
+userController.getUserIdFromUserName = (userName) =>{
     for(let user in userDB){
         if(userDB[user].userName == userName) {
             let userData = userDB[user];
@@ -37,17 +37,17 @@ const getUserIdFromUserName = (userName) =>{
 }
 
 // Comprobacion de usuarios
-const checkUserCredentials = async (userName, pass) => {
+userController.checkUserCredentials = async (userName, pass) => {
     try {
-        let user = getUserIdFromUserName(userName);
+        let user = userController.getUserIdFromUserName(userName);
         if (!user) {
             return false; // Usuario no encontrado
         }
-        const passwordMatch = await comparePassword(pass, user.password);
+        const passwordMatch = await myCrypt.comparePassword(pass, user.password);
         return passwordMatch;
     } catch (error) {
         throw error;
     }
 };
 
-export { registerUser, checkUserCredentials, getUser, getUserIdFromUserName };
+export { userController };

@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
+const myCrypt = {};
 
-const hashPassword = async (plainTextPass) => {
+myCrypt.hashPassword = async (plainTextPass) => {
     try {
         const hashedPassword = await bcrypt.hash(plainTextPass, 10);
         return hashedPassword;
@@ -9,11 +10,11 @@ const hashPassword = async (plainTextPass) => {
     }
 };
 
-const hashPasswordSync = (plainTextPass) => {
+myCrypt.hashPasswordSync = (plainTextPass) => {
     return bcrypt.hashSync(plainTextPass, 10);
 };
 
-const comparePassword = async (plainPassword, hashPassword) => {
+myCrypt.comparePassword = async (plainPassword, hashPassword) => {
     try {
         const result = await bcrypt.compare(plainPassword, hashPassword);
         return result;
@@ -23,4 +24,4 @@ const comparePassword = async (plainPassword, hashPassword) => {
 };
 
 
-export { hashPassword, hashPasswordSync, comparePassword };
+export { myCrypt };

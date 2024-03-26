@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
-import { checkUserCredentials, getUserIdFromUserName } from "./users_controller.js";
+import { userController } from "./user_controller.js";
 
-import { registerUser } from "./users_controller.js";
-await registerUser("bettatech", "1234");
+// Registro de usuario *Temporal para pruebas*
+await userController.registerUser("bettatech", "1234");
 
 const authController = {};
 
@@ -14,14 +14,14 @@ authController.auth = async (req, res) => {
         
         // Comprobamos credenciales
         const { userName, password } = req.body;
-        const validCredentials = await checkUserCredentials(userName, password);
+        const validCredentials = await userController.checkUserCredentials(userName, password);
 
         // Si no son válidas, error
         if (!validCredentials) {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        let user = getUserIdFromUserName(req.body.userName);
+        let user = userController.getUserIdFromUserName(req.body.userName);
         //console.log("user de auth_controller:")
         //console.log(user)
         const payload = {
@@ -36,4 +36,4 @@ authController.auth = async (req, res) => {
     }
 }
 
-export {authController};
+export { authController };

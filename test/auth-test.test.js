@@ -42,8 +42,8 @@ describe('Suite de pruebas auth', () => {
             // Expect valid login
             assert.equal(res.statusCode, 200);
             const token = res.body.token;
-            console.log("Token que recibe el get del test:");
-            console.log(token);
+            //console.log("Token que recibe el get del test:");
+            //console.log(token);
             request(app)
                 .get("/team")
                 .set('Authorization', `JWT ${token}`)
