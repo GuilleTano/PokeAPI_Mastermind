@@ -11,7 +11,7 @@ authController.auth = async (req, res) => {
         // Comprobamos que recibimos datos en el body de la request
         if(!req.body) return res.status(400).json({message: "Missing data"});
         if(!req.body.userName || !req.body.password) return res.status(400).json({message: "Missing data"});
-
+        
         // Comprobamos credenciales
         const { userName, password } = req.body;
         const validCredentials = await checkUserCredentials(userName, password);
@@ -21,11 +21,14 @@ authController.auth = async (req, res) => {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        // Si son válidas, generamos un JWT y lo devolvemos
-        //const token = jwt.sign({ userID: userName }, "secretKey");
-
         let user = getUserIdFromUserName(req.body.userName);
-        const token = jwt.sign({ userID: user.userId }, "secretKey");
+        //console.log("user de auth_controller:")
+        //console.log(user)
+        const payload = {
+            userId: user.userId,
+            userName: user.userName
+        };
+        const token = jwt.sign(payload, "secretKey");
         res.status(200).json({ token: token });
     } catch (error) {
         console.error("Error en el endpoint de login:", error);

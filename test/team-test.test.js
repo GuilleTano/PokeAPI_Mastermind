@@ -1,4 +1,3 @@
-/*
 import { assert } from 'chai';
 import { app } from '../app.js';
 import { use } from 'chai';
@@ -36,4 +35,3 @@ describe('Suite de pruebas team', () => {
     });
 
 });
-*/

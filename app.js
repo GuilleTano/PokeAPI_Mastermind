@@ -8,10 +8,6 @@ const app = express();
 app.use(bodyParser.json());
 const port = 3000;
 
-// Registro de usuario para pruebas
-//import { registerUser } from "./controllers/users_controller.js";
-//await registerUser("bettatech", "1234");
-
 // ENDPOINTS:
 // Raiz 
 app.get("/", (req, res)=>{

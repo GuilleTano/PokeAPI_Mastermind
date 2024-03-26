@@ -11,23 +11,17 @@ myPassport();
 teamRoutes.route("/")
     .get(passport.authenticate("jwt", {session: false}), (req, res) => {
         // Consultar Equipo
-
-        //console.log(req.body);
-        
+        //console.log("Usuario autenticado:", req.user);
         let user = getUser(req.user.userId);
-        console.log(user);
         res.status(200).json({
             trainer: user.userName,
             team: teamController.getTeam(req.user.userId)
         });
-        
-
     })
     .put((req, res)=>{
 
         teamController.setTeam(req.body.user, req.body.team);
     })
-
 
 teamRoutes.route("/pokemons")
     .post((req, res)=>{

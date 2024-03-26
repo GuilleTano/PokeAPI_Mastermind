@@ -8,8 +8,9 @@ const myPassport = () => {
     };
     passport.use(new JwtStrategy(opts, async (decoded, done) => {
         try {
-            // Los datos de user corresponden a los datos codificados en el token
-            const user = { id: decoded.sub, username: decoded.name };
+            //console.log("Contenido de decoded en auth.js:")
+            //console.log(decoded)
+            const user = { userId: decoded.userId, userName: decoded.userName };
             return done(null, user);
         } catch (err) {
             return done(err, false);

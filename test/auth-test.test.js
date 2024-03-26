@@ -1,5 +1,4 @@
 import { assert } from 'chai';
-import { expect } from 'chai';
 import { app } from '../app.js';
 import { use } from 'chai';
 import superagent from 'chai-superagent';
@@ -42,16 +41,14 @@ describe('Suite de pruebas auth', () => {
         .end((err, res)=>{
             // Expect valid login
             assert.equal(res.statusCode, 200);
-            //expect(res.statusCode).to.equal(200);
             const token = res.body.token;
+            console.log("Token que recibe el get del test:");
             console.log(token);
-
             request(app)
                 .get("/team")
                 .set('Authorization', `JWT ${token}`)
                 .end((err, res)=>{
                     assert.equal(res.statusCode, 200);
-                    //expect(res.statusCode).to.equal(200);
                     done();
                 })
         });
