@@ -8,9 +8,12 @@ myPassport();
 // Como en app.js ya pondremos el endpoint en /team, aqui nos referimos a la raiz de /team
 teamRoutes.route("/")
     .get(passport.authenticate("jwt", {session: false}), teamController.auth)
-    .put((req, res)=>{
+
+    .put(passport.authenticate("jwt", {session: false}), (req, res)=>{
         // Modificar equipo
-        teamController.setTeam(req.body.user, req.body.team);
+
+        teamController.setTeam(req.user.userId, req.body.team);
+        res.status(200).send();
     })
 
 teamRoutes.route("/pokemons")

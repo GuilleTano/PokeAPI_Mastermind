@@ -16,22 +16,23 @@ teamController.auth = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
-
-teamController.bootstrapTeam = (userId) => {
-    teamDB[userId] = [{ name: "Charizard" }, { name: "Blastoise" }];
-}
-
-teamController.addPokemon = (userId, pokemonName) => {
-    teamDB[userId].push({ name: pokemonName });
+/* teamController.auth es en realidad el getTeam ?*/
+teamController.getTeam = (userId) => {
+    return teamDB[userId];
 }
 
 teamController.setTeam = (userId, team) => {
     teamDB[userId] = team;
 }
 
-teamController.getTeam = (userId) => {
-    return teamDB[userId];
+teamController.bootstrapTeam = (userId) => {
+    teamDB[userId] = [];
 }
+
+teamController.addPokemon = (userId, pokemonName) => {
+    teamDB[userId].push({ name: pokemonName });
+}
+
 
 
 export { teamController };
