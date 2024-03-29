@@ -11,10 +11,7 @@ teamRoutes.route("/")
     .put(passport.authenticate("jwt", {session: false}), teamController.setTeam)
 
 teamRoutes.route("/pokemons")
-    .post((req, res)=>{
-        // Agrega un pokemon
-        res.status(200).send("Hello World!");
-    })
+    .post(passport.authenticate("jwt", {session: false}), teamController.addPokemon)
 
 teamRoutes.route("/pokemons/:pokeid")
     .delete((req, res)=>{

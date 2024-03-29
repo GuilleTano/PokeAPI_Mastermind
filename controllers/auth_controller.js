@@ -3,6 +3,7 @@ import { userController } from "./user_controller.js";
 
 // Registro de usuario *Temporal para pruebas*
 await userController.registerUser("bettatech", "1234");
+await userController.registerUser("mastermind", "1235");
 
 const authController = {};
 
