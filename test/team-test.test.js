@@ -111,7 +111,6 @@ describe('Suite de pruebas team', () => {
                     .end((err, res) => {
                         request(app)
                             .delete(`/team/pokemons/9`)
-                            .send({ id: 9 })
                             .set('Authorization', `JWT ${loginToken}`)
                             .end((err, res) => {
                                 // Luego hacemos un get a team para obtener el equipo del usuario
@@ -121,7 +120,7 @@ describe('Suite de pruebas team', () => {
                                     .end((err, res) => {
                                         assert.equal(res.statusCode, 200);
                                         assert.equal(res.body.trainer, "bettatech");
-                                        assert.equal(res.body.team.length, 1);
+                                        assert.equal(res.body.team.length, testTeam.length - 1);
                                         done();
                                     })
                             })

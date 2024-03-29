@@ -47,7 +47,10 @@ teamController.addPokemon = async (req, res) => {
 
 teamController.deletePokemon = async (req, res) => {
     try {
-        const pokemonId = req.body.id;
+        const pokemonId = parseInt(req.params.pokeid);
+        console.log(typeof pokemonId)
+        console.log(pokemonId)
+
         let user = await userController.getUser(req.user.userId);
         let userTeam = (teamDB[user.userId]).filter(item => item.pokedexNumber !== pokemonId);
         teamDB[user.userId] = userTeam;
