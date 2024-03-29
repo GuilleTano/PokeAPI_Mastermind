@@ -19,5 +19,4 @@ teamRoutes.route("/pokemons/:pokeid")
         res.status(200).send("Hello World!");
     })
 
-
 export { teamRoutes };

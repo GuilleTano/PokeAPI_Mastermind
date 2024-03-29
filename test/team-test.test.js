@@ -3,8 +3,21 @@ import { app } from '../app.js';
 import { use } from 'chai';
 import superagent from 'chai-superagent';
 import request from 'supertest';
+import { userController } from "../controllers/user_controller.js";
+import { teamController } from "../controllers/team_controller.js";
 
 use(superagent());
+
+before( async () =>{
+    await userController.registerUser("bettatech", "1234");
+    await userController.registerUser("mastermind", "1235");
+});
+
+// A diferencia del after() normal, el afterEach() se ejecuta despues de cada it()
+afterEach((done) =>{
+    teamController.cleanUpTeam();
+    done();
+});
 
 describe('Suite de pruebas team', () => {
     // Obtener el equipo del usuario logueado
@@ -44,7 +57,6 @@ describe('Suite de pruebas team', () => {
             });
     });
 
-
     // Agregar un pokemon al equipo del usuario
     it('should return the pokedex number', (done) => {
         // Team de pruebas 
@@ -53,7 +65,7 @@ describe('Suite de pruebas team', () => {
         request(app)
             .post("/auth/login")
             .set("content-type", "application/json")
-            .send({ userName: "mastermind", password: "1235" })
+            .send({ userName: "bettatech", password: "1234" })
             .end((err, res) => {
                 assert.equal(res.statusCode, 200);
                 const loginToken = res.body.token;
@@ -70,7 +82,7 @@ describe('Suite de pruebas team', () => {
                             .set('Authorization', `JWT ${loginToken}`)
                             .end((err, res) => {
                                 assert.equal(res.statusCode, 200);
-                                assert.equal(res.body.trainer, "mastermind");
+                                assert.equal(res.body.trainer, "bettatech");
                                 assert.equal(res.body.team.length, 1);
                                 assert.equal(res.body.team[0].name, pokemonName);
                                 assert.equal(res.body.team[0].pokedexNumber, 1);
@@ -80,4 +92,9 @@ describe('Suite de pruebas team', () => {
             });
     });
 
+});
+
+after((done) =>{
+    userController.cleanUpUsers();
+    done();
 });

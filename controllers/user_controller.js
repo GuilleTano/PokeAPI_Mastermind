@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { myCrypt } from "../crypto.js";
 import { teamController } from './team_controller.js';
 const userController = {};
-const userDB = {};
+let userDB = {};
 
 // Registro de usuarios
 userController.registerUser = async (user, pass) => {
@@ -19,6 +19,10 @@ userController.registerUser = async (user, pass) => {
         throw error;
     }
 };
+// Limpiar la base de datos (solo usar en test)
+userController.cleanUpUsers = () => {
+    userDB = {};
+}
 
 userController.getUser = (userId) =>{
     return userDB[userId];

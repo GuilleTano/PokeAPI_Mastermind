@@ -3,8 +3,14 @@ import { app } from '../app.js';
 import { use } from 'chai';
 import superagent from 'chai-superagent';
 import request from 'supertest';
+import { userController } from "../controllers/user_controller.js";
 
 use(superagent());
+
+before( async () =>{
+    await userController.registerUser("bettatech", "1234");
+    await userController.registerUser("mastermind", "1235");
+});
 
 describe('Suite de pruebas auth', () => {
 
@@ -54,4 +60,9 @@ describe('Suite de pruebas auth', () => {
         });
     });
 
+});
+
+after((done) =>{
+    userController.cleanUpUsers();
+    done();
 });

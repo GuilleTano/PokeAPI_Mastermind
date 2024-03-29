@@ -1,7 +1,7 @@
 import { userController } from "./user_controller.js";
 import axios from 'axios'
 const teamController = {};
-const teamDB = {};
+let teamDB = {};
 
 teamController.getTeam = async (req, res) => {
     try {
@@ -49,6 +49,12 @@ teamController.addPokemon = async (req, res) => {
 
 teamController.bootstrapTeam = (userId) => {
     teamDB[userId] = [];
+}
+// Limpiar la base de datos (solo usar en test)
+teamController.cleanUpTeam = () => {
+    for (let user in teamDB){
+        teamDB[user] = [];
+    }
 }
 
 export { teamController };
