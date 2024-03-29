@@ -1,7 +1,7 @@
 import { userController } from "./user_controller.js";
 import axios from 'axios'
 const teamController = {};
-let teamDB = {};
+let teamDB = [];
 
 teamController.getTeam = async (req, res) => {
     try {
@@ -31,10 +31,8 @@ teamController.setTeam = async (req, res) => {
 teamController.addPokemon = async (req, res) => {
     try {
         const pokemonName = req.body.name;
-        console.log("calling pokeAPI");
         // LLamada con Axios a PokeAPI
         const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`);
-        //console.log(response.data.id);
         const pokemonObj = {
             name: pokemonName, 
             pokedexNumber: response.data.id
@@ -43,6 +41,19 @@ teamController.addPokemon = async (req, res) => {
         res.status(201).json(pokemonObj);
     } catch (error) {
         console.error("Error en el endpoint team/pokemons: ", error);
+        res.status(400).json({ message: error });
+    }
+}
+
+teamController.deletePokemon = async (req, res) => {
+    try {
+        const pokemonId = req.body.id;
+        let user = await userController.getUser(req.user.userId);
+        let userTeam = (teamDB[user.userId]).filter(item => item.pokedexNumber !== pokemonId);
+        teamDB[user.userId] = userTeam;
+        res.status(204).send();
+    } catch (error) {
+        console.error("Error en el endpoint /pokemons/:pokeid: ", error);
         res.status(400).json({ message: error });
     }
 }

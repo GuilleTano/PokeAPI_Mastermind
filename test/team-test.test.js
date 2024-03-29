@@ -8,13 +8,13 @@ import { teamController } from "../controllers/team_controller.js";
 
 use(superagent());
 
-before( async () =>{
+before(async () => {
     await userController.registerUser("bettatech", "1234");
     await userController.registerUser("mastermind", "1235");
 });
 
 // A diferencia del after() normal, el afterEach() se ejecuta despues de cada it()
-afterEach((done) =>{
+afterEach((done) => {
     teamController.cleanUpTeam();
     done();
 });
@@ -40,7 +40,6 @@ describe('Suite de pruebas team', () => {
                     })
                     .set('Authorization', `JWT ${loginToken}`)
                     .end((err, res) => {
-
                         // Luego hacemos un get a team para obtener el equipo del usuario
                         request(app)
                             .get("/team")
@@ -59,7 +58,7 @@ describe('Suite de pruebas team', () => {
 
     // Agregar un pokemon al equipo del usuario
     it('should return the pokedex number', (done) => {
-        // Team de pruebas 
+        // Pokemon de prueba 
         const pokemonName = "Bulbasaur";
         // Primero debe loguearse el usuario
         request(app)
@@ -72,7 +71,7 @@ describe('Suite de pruebas team', () => {
                 // Hacemos un post para agregar el pokemon al equipo
                 request(app)
                     .post("/team/pokemons")
-                    .send({name: pokemonName})
+                    .send({ name: pokemonName })
                     .set('Authorization', `JWT ${loginToken}`)
                     .end((err, res) => {
 
@@ -92,9 +91,47 @@ describe('Suite de pruebas team', () => {
             });
     });
 
+    // Eliminar un pokemon del equipo del usuario
+    it('should return the team of the given user without the removed pokemon', (done) => {
+        // Team de pruebas
+        const testTeam = [{ name: "Charizard", pokedexNumber: 6 }, { name: "Blastoise", pokedexNumber: 9 }];
+        // Primero debe loguearse el usuario
+        request(app)
+            .post("/auth/login")
+            .set("content-type", "application/json")
+            .send({ userName: "bettatech", password: "1234" })
+            .end((err, res) => {
+                assert.equal(res.statusCode, 200);
+                const loginToken = res.body.token;
+                // Seteamos el equipo del usuario cuando se loguea
+                request(app)
+                    .put("/team")
+                    .send({ team: testTeam })
+                    .set('Authorization', `JWT ${loginToken}`)
+                    .end((err, res) => {
+                        request(app)
+                            .delete(`/team/pokemons/9`)
+                            .send({ id: 9 })
+                            .set('Authorization', `JWT ${loginToken}`)
+                            .end((err, res) => {
+                                // Luego hacemos un get a team para obtener el equipo del usuario
+                                request(app)
+                                    .get("/team")
+                                    .set('Authorization', `JWT ${loginToken}`)
+                                    .end((err, res) => {
+                                        assert.equal(res.statusCode, 200);
+                                        assert.equal(res.body.trainer, "bettatech");
+                                        assert.equal(res.body.team.length, 1);
+                                        done();
+                                    })
+                            })
+                    })
+            });
+    });
+
 });
 
-after((done) =>{
+after((done) => {
     userController.cleanUpUsers();
     done();
 });

@@ -14,9 +14,6 @@ teamRoutes.route("/pokemons")
     .post(passport.authenticate("jwt", {session: false}), teamController.addPokemon)
 
 teamRoutes.route("/pokemons/:pokeid")
-    .delete((req, res)=>{
-        // Elimina un pokemon
-        res.status(200).send("Hello World!");
-    })
+    .delete(passport.authenticate("jwt", {session: false}), teamController.deletePokemon)
 
 export { teamRoutes };
