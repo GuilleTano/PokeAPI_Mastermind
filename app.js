@@ -1,8 +1,8 @@
 import express from "express";
 import bodyParser from "body-parser";
 // Routes
-import { authRoutes } from "./routers/auth_router.js";
-import { teamRoutes } from "./routers/team_router.js";
+import { authRoutes } from "./auth/auth_router.js";
+import { teamRoutes } from "./team/team_router.js";
 
 const app = express();
 app.use(bodyParser.json());

@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { myCrypt } from "../crypto.js";
-import { teamController } from './team_controller.js';
+import { teamController } from '../team/team_controller.js';
 const userController = {};
 let userDB = {};
 
