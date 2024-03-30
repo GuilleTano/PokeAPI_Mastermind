@@ -23,5 +23,4 @@ myCrypt.comparePassword = async (plainPassword, hashPassword) => {
     }
 };
 
-
 export { myCrypt };

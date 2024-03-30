@@ -1,5 +1,5 @@
 import { assert } from 'chai';  // Using Assert style
-import { app } from '../app.js';
+import { app } from '../../app.js';
 import { use } from 'chai';
 import superagent from 'chai-superagent';
 import request from 'supertest';

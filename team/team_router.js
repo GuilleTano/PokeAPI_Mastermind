@@ -1,6 +1,6 @@
 import express from "express";
 import passport from "passport"     // Importo passport
-import myPassport from "../auth.js"; // Importo mi configuracion de passport
+import myPassport from "../tools/auth.js"; // Importo mi configuracion de passport
 import { teamController } from "./team_controller.js";
 const teamRoutes = express.Router();
 myPassport();
