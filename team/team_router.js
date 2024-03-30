@@ -1,15 +1,15 @@
 import express from "express";
-import { teamController } from "./team_controller.js";
+import { teamHttpHandler } from "./team_http.js";
 const teamRoutes = express.Router();
 
 teamRoutes.route("/")
-    .get(teamController.getTeam)
-    .put(teamController.setTeam)
+    .get(teamHttpHandler.getTeam)
+    .put(teamHttpHandler.setTeam)
 
 teamRoutes.route("/pokemons")
-    .post(teamController.addPokemon)
+    .post(teamHttpHandler.addPokemon)
 
 teamRoutes.route("/pokemons/:pokeid")
-    .delete(teamController.deletePokemon)
+    .delete(teamHttpHandler.deletePokemon)
 
 export { teamRoutes };

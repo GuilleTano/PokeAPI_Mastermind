@@ -3,7 +3,7 @@ import { app } from '../../app.js';
 import { use } from 'chai';
 import superagent from 'chai-superagent';
 import request from 'supertest';
-import { userController } from "../../user/user_controller.js";
+import { userController } from "../user_controller.js";
 
 use(superagent());
 

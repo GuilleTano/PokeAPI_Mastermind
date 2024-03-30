@@ -3,8 +3,8 @@ import { app } from '../../app.js';
 import { use } from 'chai';
 import superagent from 'chai-superagent';
 import request from 'supertest';
-import { userController } from "../../user/user_controller.js";
-import { teamController } from "../team_controller.js";
+import { userController } from "../../auth/user_controller.js";
+import { teamController } from '../team_controller.js';
 
 use(superagent());
 

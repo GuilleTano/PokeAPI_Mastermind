@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
-import { userController } from "../user/user_controller.js";
-const authController = {};
+import { userController } from "./user_controller.js";
+const authHttpHandler = {};
 
-authController.auth = async (req, res) => {
+authHttpHandler.loginUser = async (req, res) => {
     try {
         // Comprobamos que recibimos datos en el body de la request
         if(!req.body) return res.status(400).json({message: "Missing data"});
@@ -18,8 +18,6 @@ authController.auth = async (req, res) => {
         }
 
         let user = userController.getUserIdFromUserName(req.body.userName);
-        //console.log("user de auth_controller:")
-        //console.log(user)
         const payload = {
             userId: user.userId,
             userName: user.userName
@@ -32,4 +30,4 @@ authController.auth = async (req, res) => {
     }
 }
 
-export { authController };
+export { authHttpHandler };
