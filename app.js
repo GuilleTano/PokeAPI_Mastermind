@@ -1,21 +1,17 @@
 import express from "express";
-import bodyParser from "body-parser";
+import { middlewares } from "./middlewares.js";
 // Routes
 import { authRoutes } from "./auth/auth_router.js";
 import { teamRoutes } from "./team/team_router.js";
 
 const app = express();
-app.use(bodyParser.json());
 const port = 3000;
 
-// ENDPOINTS:
-// Raiz 
+middlewares.setupMiddlewares(app);
 app.get("/", (req, res)=>{
     res.status(200).send("Hello World!");
 });
-// Login
 app.use("/auth", authRoutes);
-// Consulta de equipo y otros
 app.use("/team", teamRoutes);
 
 app.listen(port, ()=>{

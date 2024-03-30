@@ -10,8 +10,6 @@ authRoutes.route("/")
         res.send("Auth router");
     })
 
-
 authRoutes.route("/login").post(authController.auth);
-
 
 export { authRoutes };
