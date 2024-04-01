@@ -40,8 +40,12 @@ teamHttpHandler.addPokemon = async (req, res) => {
         teamController.addPokemon(req.user.userId, pokemonObj);
         res.status(201).json(pokemonObj);
     } catch (error) {
-        console.error("Error en el endpoint team/pokemons: ", error);
-        res.status(400).json({ message: error });
+        if (error instanceof Error) {
+            res.status(400).json({ message: "You already have 6 pokemons in your team" });
+        } else {
+            console.error("Error en el endpoint team/pokemons: ", error);
+            res.status(500).json({ message: "Internal Server Error" });
+        }
     }
 }
 

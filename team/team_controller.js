@@ -10,7 +10,11 @@ teamController.setTeam = (userId, team) => {
 }
 
 teamController.addPokemon = (userId, pokemon) => {
-    teamDB[userId].push(pokemon);
+    if(teamDB[userId].length == 6){
+        throw new Error();
+    } else {
+        teamDB[userId].push(pokemon);
+    }
 }
 
 teamController.removePokemon = (userId, pokeId) => {

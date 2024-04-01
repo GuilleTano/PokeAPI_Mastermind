@@ -128,6 +128,45 @@ describe('Suite de pruebas team', () => {
             });
     });
 
+    // No puedes agregar un Pokemon si ya tienes 6
+    it('should not be able to add pokemon if you already have 6', (done) => {
+        // Team de pruebas
+        const testTeam = [
+            { name: "Charizard"},
+            { name: "Blastoise"},
+            { name: "Pikachu"},
+            { name: "Vaporeon"},
+            { name: "Ponyta"},
+            { name: "Diglett"},
+        ];
+        // Primero debe loguearse el usuario
+        request(app)
+            .post("/auth/login")
+            .set("content-type", "application/json")
+            .send({ userName: "bettatech", password: "1234" })
+            .end((err, res) => {
+                assert.equal(res.statusCode, 200);
+                const loginToken = res.body.token;
+                // Seteamos el equipo del usuario cuando se loguea
+                request(app)
+                    .put("/team")
+                    .send({ team: testTeam })
+                    .set('Authorization', `JWT ${loginToken}`)
+                    .end((err, res) => {
+                        // Intentamos agregar un pokemon extra
+                        request(app)
+                            .post(`/team/pokemons`)
+                            .send([{name:"Psyduck"}])
+                            .set('Authorization', `JWT ${loginToken}`)
+                            .end((err, res) => {
+                                assert.equal(res.statusCode, 400);
+                                done();
+                            })
+                    })
+            });
+    });
+
+
 });
 
 after((done) => {
