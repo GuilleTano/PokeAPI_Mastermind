@@ -1,5 +1,9 @@
+import mongoose from "mongoose";
 const teamController = {};
 let teamDB = [];
+
+const TeamModel = mongoose.model("TeamModel", {userId: String, team: Array});
+
 
 teamController.getTeam = (userId) => {
     return teamDB[userId];
@@ -24,8 +28,16 @@ teamController.removePokemon = (userId, pokeId) => {
     }
 }
 
-teamController.bootstrapTeam = (userId) => {
-    teamDB[userId] = [];
+teamController.bootstrapTeam = async (userId) => {
+    try{
+        let newTeam = new TeamModel({
+            userId: userId,
+            team: []
+        });
+        await newTeam.save();
+    } catch (err) {
+        throw new Error(err);
+    }
 }
 // Limpiar la base de datos (solo usar en test)
 teamController.cleanUpTeam = () => {

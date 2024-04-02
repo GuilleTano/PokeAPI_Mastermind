@@ -3,6 +3,9 @@ import { middlewares } from "./middlewares.js";
 // Routes
 import { authRoutes } from "./auth/auth_router.js";
 import { teamRoutes } from "./team/team_router.js";
+// Conexion mongoDB
+import { connectionDB } from "./database.js";
+await connectionDB();
 
 const app = express();
 const port = 3000;
