@@ -17,7 +17,7 @@ authHttpHandler.loginUser = async (req, res) => {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        let user = userController.getUserIdFromUserName(req.body.userName);
+        let user = userController.getUserFromUserName(req.body.userName);
         const payload = {
             userId: user.userId,
             userName: user.userName

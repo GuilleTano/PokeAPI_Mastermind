@@ -4,7 +4,15 @@ import { teamController } from '../team/team_controller.js';
 import mongoose from "mongoose";
 const userController = {};
 
-let userDB = {};
+// Limpiar la base de datos (solo usar en test)
+userController.cleanUpUsers = async () => {
+    try {
+        await UserModel.deleteMany({});
+        return
+    } catch (err){
+        throw new Error(err);
+    }
+}
 
 // Modelo de mongoDB
 const UserModel = mongoose.model("UserModel", {userName: String, password: String, userId: String});
@@ -23,40 +31,39 @@ userController.registerUser = async (user, pass) => {
         teamController.bootstrapTeam(userId); // Crea en la DB de team un equipo vacio para el usuario
         return userId;
     } catch (error) {
-        throw new Error(error);
+        throw new Error("Error al registrar usurio: " + error);
     }
 };
 
-// Limpiar la base de datos (solo usar en test)
-userController.cleanUpUsers = () => {
-    userDB = {};
+userController.getUser = async (userId) =>{
+    try{
+        const user = await UserModel.findOne({userId: userId})
+        return user;
+    } catch (err) {
+        throw new Error("Error al obtener usuario en DB: " + err);
+    }
 }
 
-userController.getUser = (userId) =>{
-    return userDB[userId];
-}
-
-userController.getUserIdFromUserName = (userName) =>{
-    for(let user in userDB){
-        if(userDB[user].userName == userName) {
-            let userData = userDB[user];
-            userData.userId = user;
-            return userDB[user];
-        }
+userController.getUserFromUserName = async (userName) =>{
+    try{
+        const user = await UserModel.findOne({userName: userName})
+        return user;
+    } catch (err) {
+        throw new Error("Error al obtener usuario en DB: " + err);
     }
 }
 
 // Comprobacion de usuarios
 userController.checkUserCredentials = async (userName, pass) => {
     try {
-        let user = userController.getUserIdFromUserName(userName);
+        let user = userController.getUserFromUserName(userName);
         if (!user) {
             return false; // Usuario no encontrado
         }
         const passwordMatch = await myCrypt.comparePassword(pass, user.password);
         return passwordMatch;
     } catch (error) {
-        throw new Error(error);
+        throw new Error("Error al checkear credenciales: " + error);
     }
 };
 

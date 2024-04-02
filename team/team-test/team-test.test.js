@@ -8,15 +8,15 @@ import { teamController } from '../team_controller.js';
 
 use(superagent());
 
-before(async () => {
+beforeEach(async () => {
     await userController.registerUser("bettatech", "1234");
     await userController.registerUser("mastermind", "1235");
 });
 
 // A diferencia del after() normal, el afterEach() se ejecuta despues de cada it()
-afterEach((done) => {
-    teamController.cleanUpTeam();
-    done();
+afterEach(async () => {
+    await userController.cleanUpUsers();
+    await teamController.cleanUpTeam();
 });
 
 describe('Suite de pruebas team', () => {
@@ -169,7 +169,9 @@ describe('Suite de pruebas team', () => {
 
 });
 
+/*
 after((done) => {
     userController.cleanUpUsers();
     done();
 });
+*/

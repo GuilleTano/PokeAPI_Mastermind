@@ -1,49 +1,80 @@
 import mongoose from "mongoose";
+const TeamModel = mongoose.model("TeamModel", { userId: String, team: Array });
 const teamController = {};
-let teamDB = [];
 
-const TeamModel = mongoose.model("TeamModel", {userId: String, team: Array});
-
-
-teamController.getTeam = (userId) => {
-    return teamDB[userId];
-}
-
-teamController.setTeam = (userId, team) => {
-    teamDB[userId] = team;
-}
-
-teamController.addPokemon = (userId, pokemon) => {
-    if(teamDB[userId].length == 6){
-        throw new Error();
-    } else {
-        teamDB[userId].push(pokemon);
-    }
-}
-
-teamController.removePokemon = (userId, pokeId) => {
-    if (teamDB[userId].some(poke => poke.pokedexNumber === pokeId)){
-        let userTeam = (teamDB[userId]).filter(item => item.pokedexNumber !== pokeId);
-        teamDB[userId] = userTeam;
-    }
-}
-
-teamController.bootstrapTeam = async (userId) => {
-    try{
-        let newTeam = new TeamModel({
-            userId: userId,
-            team: []
-        });
-        await newTeam.save();
+// Limpiar la base de datos (solo usar en test)
+teamController.cleanUpTeam = async () => {
+    try {
+        await TeamModel.deleteMany({});
+        return
     } catch (err) {
         throw new Error(err);
     }
 }
-// Limpiar la base de datos (solo usar en test)
-teamController.cleanUpTeam = () => {
-    for (let user in teamDB){
-        teamDB[user] = [];
+
+teamController.getTeam = async (userId) => {
+    try {
+        const dbTeam = await TeamModel.findOne({ userId: userId });
+        return dbTeam || [];
+    } catch (err) {
+        throw new Error("Error al obtener el equipo: " + err);
     }
 }
 
-export {teamController}
+teamController.setTeam = async (userId, team) => {
+    try {
+        const dbTeam = await TeamModel.findOne({ userId: userId });
+        dbTeam.team = team;
+        await dbTeam.save();
+        return
+    } catch (err) {
+        throw new Error("Error al setear equipo en usuario: " + err);
+    }
+}
+
+teamController.addPokemon = async (userId, pokemon) => {
+    try {
+        const dbTeam = await TeamModel.findOne({ userId: userId });
+        if (dbTeam.team.length == 6) {
+            throw new Error("El equipo esta lleno");
+        } else {
+            dbTeam.team.push(pokemon);
+            await dbTeam.save();
+            return
+        }
+    } catch (err) {
+        throw new Error("Error al cargar el equipo: " + err);
+    }
+}
+
+teamController.removePokemon = async (userId, pokeId) => {
+    try {
+        const dbTeam = await TeamModel.findOne({ userId: userId });
+        if (dbTeam.team.length == 0) throw new Error("El equipo no tiene ningun Pokémon");
+
+        if ((dbTeam.team).some(poke => poke.pokedexNumber === pokeId)) {
+            let newTeam = (dbTeam.team).filter(item => item.pokedexNumber !== pokeId);
+            dbTeam.team = newTeam;
+            await dbTeam.save();
+            return
+        } else {
+            throw new Error("El Pokémon que desea eliminar no existe en este equipo");
+        }
+    } catch (err) {
+        throw new Error("Error al eliminar un Pokémon: " + err);
+    }
+}
+
+teamController.bootstrapTeam = async (userId) => {
+    try {
+        let dbTeam = new TeamModel({
+            userId: userId,
+            team: []
+        });
+        await dbTeam.save();
+    } catch (err) {
+        throw new Error("Error al crear equipo: " + err);
+    }
+}
+
+export { teamController }
