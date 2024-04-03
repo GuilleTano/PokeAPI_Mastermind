@@ -5,8 +5,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start":"node --env-file=.env app.js ",
-    "test": "mocha '**/*-test/**/*.test.js'"
+    "start": "set NODE_ENV=production&& node --env-file=.env app.js ",
+    "test": "set NODE_ENV=test&& mocha -r dotenv/config '**/*-test/**/*.test.js'"
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +25,7 @@
     "chai": "^5.1.0",
     "chai-http": "^4.4.0",
     "chai-superagent": "^3.0.0",
+    "dotenv": "^16.4.5",
     "mocha": "^10.3.0",
     "supertest": "^6.3.4"
   }

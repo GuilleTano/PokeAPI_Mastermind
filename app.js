@@ -9,6 +9,7 @@ await connectionDB();
 
 /*
 import { userController } from "./auth/user_controller.js";
+await userController.registerUser("bettatech", "1234");
 await userController.registerUser("mastermind", "1235");
 */
 

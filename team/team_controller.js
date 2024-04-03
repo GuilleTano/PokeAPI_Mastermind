@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 const TeamModel = mongoose.model("TeamModel", { userId: String, team: Array });
 const teamController = {};
 
-// Limpiar la base de datos (solo usar en test)
 teamController.cleanUpTeam = async () => {
     try {
         await TeamModel.deleteMany({});

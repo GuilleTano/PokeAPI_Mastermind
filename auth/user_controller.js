@@ -5,7 +5,6 @@ import mongoose from "mongoose";
 const UserModel = mongoose.model("UserModel", {userName: String, password: String, userId: String});
 const userController = {};
 
-// Limpiar la base de datos (solo usar en test)
 userController.cleanUpUsers = async () => {
     try {
         await UserModel.deleteMany({});
@@ -15,7 +14,6 @@ userController.cleanUpUsers = async () => {
     }
 }
 
-// Registro de usuarios
 userController.registerUser = async (user, pass) => {
     try {
         const hashedPassword = await myCrypt.hashPassword(pass);
@@ -26,7 +24,7 @@ userController.registerUser = async (user, pass) => {
             password: hashedPassword
         });
         await newUser.save();
-        await teamController.bootstrapTeam(userId); // Crea en la DB de team un equipo vacio para el usuario
+        await teamController.bootstrapTeam(userId);
         return userId;
     } catch (error) {
         throw new Error("Error al registrar usurio: " + error);
@@ -51,12 +49,11 @@ userController.getUserFromUserName = async (userName) =>{
     }
 }
 
-// Comprobacion de usuarios
 userController.checkUserCredentials = async (userName, pass) => {
     try {
-        let user = userController.getUserFromUserName(userName);
+        let user = await userController.getUserFromUserName(userName);
         if (!user) {
-            return false; // Usuario no encontrado
+            return false;
         }
         const passwordMatch = await myCrypt.comparePassword(pass, user.password);
         return passwordMatch;

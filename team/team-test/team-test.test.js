@@ -5,7 +5,6 @@ import superagent from 'chai-superagent';
 import request from 'supertest';
 import { userController } from "../../auth/user_controller.js";
 import { teamController } from '../team_controller.js';
-
 use(superagent());
 
 beforeEach(async () => {
@@ -13,7 +12,6 @@ beforeEach(async () => {
     await userController.registerUser("mastermind", "1235");
 });
 
-// A diferencia del after() normal, el afterEach() se ejecuta despues de cada it()
 afterEach(async () => {
     await userController.cleanUpUsers();
     await teamController.cleanUpTeam();
@@ -46,10 +44,10 @@ describe('Suite de pruebas team', () => {
                             .set('Authorization', `JWT ${loginToken}`)
                             .end((err, res) => {
                                 assert.equal(res.statusCode, 200);
-                                assert.equal(res.body.trainer, "bettatech");
-                                assert.equal(res.body.team.length, testTeam.length);
-                                assert.equal(res.body.team[0].name, testTeam[0].name);
-                                assert.equal(res.body.team[1].name, testTeam[1].name);
+                                assert.equal(res.body.userName, "bettatech");
+                                assert.equal(res.body.team.team.length, testTeam.length);
+                                assert.equal(res.body.team.team[0].name, testTeam[0].name);
+                                assert.equal(res.body.team.team[1].name, testTeam[1].name);
                                 done();
                             })
                     })
@@ -81,10 +79,10 @@ describe('Suite de pruebas team', () => {
                             .set('Authorization', `JWT ${loginToken}`)
                             .end((err, res) => {
                                 assert.equal(res.statusCode, 200);
-                                assert.equal(res.body.trainer, "bettatech");
-                                assert.equal(res.body.team.length, 1);
-                                assert.equal(res.body.team[0].name, pokemonName);
-                                assert.equal(res.body.team[0].pokedexNumber, 1);
+                                assert.equal(res.body.userName, "bettatech");
+                                assert.equal(res.body.team.team.length, 1);
+                                assert.equal(res.body.team.team[0].name, pokemonName);
+                                assert.equal(res.body.team.team[0].pokedexNumber, 1);
                                 done();
                             })
                     })
@@ -119,8 +117,8 @@ describe('Suite de pruebas team', () => {
                                     .set('Authorization', `JWT ${loginToken}`)
                                     .end((err, res) => {
                                         assert.equal(res.statusCode, 200);
-                                        assert.equal(res.body.trainer, "bettatech");
-                                        assert.equal(res.body.team.length, testTeam.length - 1);
+                                        assert.equal(res.body.userName, "bettatech");
+                                        assert.equal(res.body.team.team.length, testTeam.length - 1);
                                         done();
                                     })
                             })
@@ -168,10 +166,3 @@ describe('Suite de pruebas team', () => {
 
 
 });
-
-/*
-after((done) => {
-    userController.cleanUpUsers();
-    done();
-});
-*/
