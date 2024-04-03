@@ -67,11 +67,12 @@ teamController.removePokemon = async (userId, pokeId) => {
 
 teamController.bootstrapTeam = async (userId) => {
     try {
-        let dbTeam = new TeamModel({
+        const dbTeam = new TeamModel({
             userId: userId,
             team: []
         });
         await dbTeam.save();
+        return
     } catch (err) {
         throw new Error("Error al crear equipo: " + err);
     }

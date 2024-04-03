@@ -7,6 +7,11 @@ import { teamRoutes } from "./team/team_router.js";
 import { connectionDB } from "./database.js";
 await connectionDB();
 
+/*
+import { userController } from "./auth/user_controller.js";
+await userController.registerUser("mastermind", "1235");
+*/
+
 const app = express();
 const port = 3000;
 

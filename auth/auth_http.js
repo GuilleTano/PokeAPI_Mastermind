@@ -2,6 +2,8 @@ import jwt from "jsonwebtoken";
 import { userController } from "./user_controller.js";
 const authHttpHandler = {};
 
+
+
 authHttpHandler.loginUser = async (req, res) => {
     try {
         // Comprobamos que recibimos datos en el body de la request
@@ -17,7 +19,7 @@ authHttpHandler.loginUser = async (req, res) => {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        let user = userController.getUserFromUserName(req.body.userName);
+        let user = await userController.getUserFromUserName(req.body.userName);
         const payload = {
             userId: user.userId,
             userName: user.userName

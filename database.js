@@ -4,9 +4,12 @@ const MONGODB_PASS = process.env.MONGODB_PASS;
 const MONGODB_NAME = process.env.MONGODB_NAME;
 const uri = `mongodb+srv://guillermotano:${MONGODB_PASS}@pokeapicluster.87azprp.mongodb.net/`;
 const options = {dbName: MONGODB_NAME};
-
+/*
+if(process.env.NODE_ENV === "test"){
+    options = {dbName: "testDB"};
+}
+*/
 const connectionDB = ()=> mongoose.connect(uri, options);
-
 mongoose.set('strictQuery', true);
 
 export {connectionDB};

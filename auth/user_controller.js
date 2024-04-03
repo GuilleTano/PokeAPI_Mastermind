@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { myCrypt } from "../tools/crypto.js";
 import { teamController } from '../team/team_controller.js';
 import mongoose from "mongoose";
+const UserModel = mongoose.model("UserModel", {userName: String, password: String, userId: String});
 const userController = {};
 
 // Limpiar la base de datos (solo usar en test)
@@ -14,9 +15,6 @@ userController.cleanUpUsers = async () => {
     }
 }
 
-// Modelo de mongoDB
-const UserModel = mongoose.model("UserModel", {userName: String, password: String, userId: String});
-
 // Registro de usuarios
 userController.registerUser = async (user, pass) => {
     try {
@@ -28,7 +26,7 @@ userController.registerUser = async (user, pass) => {
             password: hashedPassword
         });
         await newUser.save();
-        teamController.bootstrapTeam(userId); // Crea en la DB de team un equipo vacio para el usuario
+        await teamController.bootstrapTeam(userId); // Crea en la DB de team un equipo vacio para el usuario
         return userId;
     } catch (error) {
         throw new Error("Error al registrar usurio: " + error);
